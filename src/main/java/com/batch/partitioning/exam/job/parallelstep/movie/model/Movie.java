@@ -1,4 +1,4 @@
-package com.batch.partitioning.exam.job.multithreaded.movie.model;
+package com.batch.partitioning.exam.job.parallelstep.movie.model;
 
 import lombok.Data;
 

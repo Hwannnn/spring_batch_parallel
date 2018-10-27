@@ -22,7 +22,7 @@ public class SchedulingConfiguration {
     @Autowired
     private Job movieJob;
 
-	@Scheduled(initialDelay = 10000, fixedDelay = 100000)
+	@Scheduled(initialDelay = 10000, fixedDelay = 100000000)
     public void executeMyJob() throws Exception {
         JobParameters jobParameters = new JobParametersBuilder()
                 .addLong("time", System.currentTimeMillis())
