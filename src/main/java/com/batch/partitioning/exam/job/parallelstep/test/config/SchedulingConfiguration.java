@@ -1,4 +1,4 @@
-package com.batch.partitioning.exam.configration;
+package com.batch.partitioning.exam.job.parallelstep.test.config;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;

@@ -1,23 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.batch.partitioning.exam.job.parallelstep.movie.dao.MovieDao">
-    <select id="selectMovieList" resultType="com.batch.partitioning.exam.job.parallelstep.movie.model.Movie">
-        SELECT no
+<mapper namespace="com.batch.partitioning.exam.job.parallelstep.test.dao.TestDao">
+    <select id="selectAllMovieCount" resultType="int">
+        SELECT COUNT(*)
+          FROM movie
+    </select>
+
+    <select id="selectMovieList" resultType="com.batch.partitioning.exam.job.parallelstep.test.model.Movie">
+         SELECT no
               , title
               , content
           FROM movie
          ORDER BY no ASC
+         LIMIT 1000
     </select>
 
-    <insert id="insertMovieTemp" parameterType="com.batch.partitioning.exam.job.parallelstep.movie.model.Movie">
+    <insert id="insertMovieTemp" parameterType="String">
         INSERT INTO movie_temp
         (
           title
-        , content
         , reg_ymdt
         ) VALUES (
           #{title}
-        , #{content}
         , NOW()
         )
     </insert>

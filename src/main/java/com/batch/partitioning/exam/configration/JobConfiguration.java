@@ -1,5 +1,7 @@
 package com.batch.partitioning.exam.configration;
 
+import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.support.SimpleJobLauncher;
 import org.springframework.batch.core.repository.JobRepository;
@@ -15,24 +17,34 @@ import javax.sql.DataSource;
 
 @Configuration
 public class JobConfiguration {
-	@Bean("jobRepository")
-	public JobRepository getJobRepository(@Qualifier("myDataSource") DataSource dataSource,
-										  @Qualifier("transactionManager") PlatformTransactionManager transactionManager) throws Exception {
+	@Bean
+	public JobRepository jobRepository(@Qualifier("batchLogDataSource") DataSource batchLogDataSource,
+										  @Qualifier("batchLogTransactionManager") PlatformTransactionManager batchLogTransactionManager) throws Exception {
 		JobRepositoryFactoryBean factory = new JobRepositoryFactoryBean();
-		factory.setDataSource(dataSource);
-		factory.setTransactionManager(transactionManager);
+		factory.setDataSource(batchLogDataSource);
+		factory.setTransactionManager(batchLogTransactionManager);
 		factory.afterPropertiesSet();
 
 		return factory.getObject();
 	}
 
-	@Bean("jobLauncher")
-	public JobLauncher getJobLauncher(@Qualifier("jobRepository") JobRepository jobRepository) throws Exception {
+	@Bean
+	public JobLauncher jobLauncher(@Qualifier("jobRepository") JobRepository jobRepository) throws Exception {
 		SimpleJobLauncher jobLauncher = new SimpleJobLauncher();
 		jobLauncher.setJobRepository(jobRepository);
 		jobLauncher.afterPropertiesSet();
 
 		return jobLauncher;
+	}
+
+	@Bean
+	public JobBuilderFactory jobBuilderFactory(@Qualifier("jobRepository") JobRepository jobRepository) {
+		return new JobBuilderFactory(jobRepository);
+	}
+
+	@Bean
+	public StepBuilderFactory stepBuilderFactory(@Qualifier("jobRepository") JobRepository jobRepository, @Qualifier("batchLogTransactionManager") PlatformTransactionManager transactionManager) {
+		return new StepBuilderFactory(jobRepository, transactionManager);
 	}
 
 	@Bean("taskExecutor")
